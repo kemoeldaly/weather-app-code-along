@@ -68,7 +68,7 @@ const previewCity = (searchResult) => {
 };
 
 // API connection section- get search Results
-const mapboxKey = 'pk.eyJ1Ijoia2Vtby1lbGRhbHkiLCJhIjoiY2xvbmYyNDg4MXFiYzJqcW8yMjZwMG5xZyJ9.4EhatHRLBBrz4CF2BL_iqg'
+const mapboxKey = 'pk.eyJ1Ijoia2Vtby1lbGRhbHkiLCJhIjoiY2xva3AzOTAxMDZlMjJxcWh3dWw1cHY3eSJ9.QLuTBbVLqJPmgw0LZvEePw'
 const searchQuery = ref('')
 const queryTimeout = ref(null);
 const mapboxSearchResults = ref(null)

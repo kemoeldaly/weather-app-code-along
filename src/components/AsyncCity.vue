@@ -7,7 +7,7 @@
             </p>
         </div>
         <div>
-
+            <!-- Hourly -->
             <div class="max-w-screen w-full py-12 flex justify-center bg-slate-500 shadow-lg">
                 <div class="max-w-screen-md">
                     <div class="mx-8 text-white">
@@ -77,7 +77,7 @@
                 </p>
                 <img 
                 class="w-[150px] h-[50px] object-cover"
-                src="`http://openweathermap.org/img/wn/${weatherData.current.weather[0].icon}@2x.png`" alt="weather icon" >
+                :src="`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`" alt="weather icon" >
                 </div>
             </div>
         </div>
@@ -85,17 +85,16 @@
 </template>
 
 <script setup>
-import axios from 'axios';
-import { useRoute, useRouter } from 'vue-router';
+import axios from "axios";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const getWeatherData = async () => {
     try {
         const weatherData = await axios.get(
-            `https://api.openweathermap.org/data/2.5/onecall?lat=${route.query.lat}&lon=${route.query.lon}&appid=62b67d25daaa97e799082e80492d6628&units=imperial`
+            `https://api.openweathermap.org/data/2.5/onecall?lat=${route.query.lat}&lon=${route.query.lon}&appid=5bc1bad2b49d3daf42a7cd3a4a5a8fd7&units=imperial`
         );
-
-        console.log(weatherData)
+          console.log(weatherData)
 
         const localOffset = new Date().getTimezoneOffset() * 600000; 
         const utc = weatherData.data.current.dt * 1000 + localOffset;
