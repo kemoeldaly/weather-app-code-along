@@ -14,7 +14,7 @@
                         <h2 class="mb-4">Hourly Weather</h2>
                         <div class="flex gap-10 overflow-x-scroll">
                             <div
-                                v-for="hourData in weatherData.hourly"
+                                v-for="hourData in weatherData"
                                 :key="hourData.dt"
                                 class="flex flex-col gap-4 items-center"
                             >
@@ -50,7 +50,7 @@
                 Feels like {{  Math.round(weatherData.current.feels_like) }}&deg;
             </p>
             <p class="capitalize">
-                {{ weatherData.current.weather[1].description }}
+                {{ weatherData.current.weather[0].description }}
             </p>
             <img 
             class="w-[150px] h-auto"
@@ -73,13 +73,27 @@
                     {
                         weekday:"long",
                     }
-                   ) }}
+                ) 
+            }}
                 </p>
                 <img 
-                class="w-[150px] h-[50px] object-cover"
-                :src="`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`" alt="weather icon" >
+                class="w-[50px] h-[50px] object-cover"
+                :src="`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`" 
+                alt="weather icon" />
+                <div class="flex gap-2 flex-1 justify-end">
+                    <p>H: {{ Math.round(day.temp.max) }}</p>
+                    <p>L: {{ Math.round(day.temp.min) }}</p>
+                </div>
                 </div>
             </div>
+        </div>
+
+        <div 
+            v-if="!route.query.preview"
+            @click="removeCity"
+            class="flex items-center gap-2 py-12 text-white cursor-pointer">
+            <font-awesome-icon :icon="['fas', 'trash']" style="color: #ea1010;" />
+            <p>Remove City</p>
         </div>
     </div>
 </template>
@@ -92,7 +106,9 @@ const route = useRoute();
 const getWeatherData = async () => {
     try {
         const weatherData = await axios.get(
-            `https://api.openweathermap.org/data/2.5/onecall?lat=${route.query.lat}&lon=${route.query.lon}&appid=5bc1bad2b49d3daf42a7cd3a4a5a8fd7&units=imperial`
+       ` https://api.openweathermap.org/data/3.0/onecall?lat=${route.query.lat}&lon=${route.query.lon}&appid=cea09b15f4257b62a7b344d701a1430e&units=imperial`  
+
+     
         );
           console.log(weatherData)
 
@@ -114,7 +130,14 @@ const getWeatherData = async () => {
 }
 
 const weatherData = await getWeatherData();
-
-// add Remove City functionality
+const router = useRouter();
+const removeCity = () => {
+    const cities = JSON.parse(localStorage.getItem("myCities"));
+    console.log(cities);
+    const updatedCities = cities.filter((city) => city.id != route.query.id);
+    console.log(updatedCities);;
+    localStorage.setItem("myCities", JSON.stringify(updatedCities));
+    router.push({name: "dashboard"})
+} 
 </script>
 

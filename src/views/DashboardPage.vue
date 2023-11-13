@@ -29,9 +29,16 @@
                         {{ searchResult.place_name }}
                   </li>
                </template>
-           </ul>
-           
 
+           </ul>
+        </div>
+        <div class="flex flex-col gap-4">
+         <Suspense>
+            <CityList />
+            <template #fallback>
+               <CardSkeleton />
+            </template>
+         </Suspense>
         </div>
    </main>
 </template>
@@ -45,6 +52,8 @@
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import axios from "axios";
+import CityList from '../components/cityList.vue'
+import CardSkeleton from '../skeletons/CardSkeleton.vue';
 
 
 

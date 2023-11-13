@@ -3,7 +3,7 @@
         <Suspense>
             <AsyncCity />
             <template #fallback>
-                Trembling with suspense...
+               <CitiesSkeleton />
             </template>
 
         </Suspense>
@@ -12,4 +12,5 @@
 
 <script setup>
 import AsyncCity from '../components/AsyncCity.vue'
+import CitiesSkeleton from '../skeletons/CitiesSkeleton.vue';
 </script>

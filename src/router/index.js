@@ -5,6 +5,7 @@ import DashboardPage from "../views/DashboardPage.vue";
 
 import LandingPage from "../views/landingPage.vue";
 import CityPage from "../views/CityPage.vue";
+import { authGuard } from "@auth0/auth0-vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,6 +26,8 @@ const router = createRouter({
       meta: {
         title: "Dashboard",
       },
+      // below so that information is not displayed without logging in
+      beforeEnter: authGuard,
     },
     // we will need to configure the city view later
     {
@@ -34,6 +37,7 @@ const router = createRouter({
       meta: {
         title: "Weather",
       },
+      beforeEnter: authGuard,
     },
   ],
 });

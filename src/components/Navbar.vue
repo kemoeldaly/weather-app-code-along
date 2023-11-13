@@ -13,12 +13,19 @@
                   <RouterLink to="{ name: 'dashboard'}"><i class="fa-sharp fa-solid fa-bars fa-beat fa-2xl" style="color: #111112;"></i></RouterLink>
 
                   
-                    <i  class="cursor-pointer fa-solid fa-circle-info fa-flip fa-xl" style="color: #111212"  @click="toggleModal"></i>
+                    <i  class="cursor-pointer fa-solid fa-circle-info fa-flip fa-2xl" style="color: #111212"  @click="toggleModal"></i>
 
-                  <i :class="'hover:text-secondary duration-150 cursor-pointer fa-solid fa-plus fa-fade fa-xl'" style="color: #0c0d0d "></i>
+                  <i :class="'hover:text-secondary duration-150 cursor-pointer fa-solid fa-plus fa-fade fa-2xl'"
+                  @click="addCity"
+                  v-if="route.query"
+                  style="color: #0c0d0d "
+                  ></i>
+                  <i class="fas fa-sign-out-alt text-xl duration-150 hover:text-secondary cursor-pointer"
+                  @click="log_out" 
+                  
+                  ></i>
               </div>
-              
-              <Modal
+               <Modal
               :modalActive="modalActive"
               @close-modal="toggleModal"
               
@@ -41,7 +48,7 @@
                   </li>
                 </ol>
                 <h2 class="text-2xl">Removing Cities</h2>
-                <!-- <p>If you don't wangt to continue tracking a location, select the city from the dashboard. At the bottom of the page, select the "Remove city" icon.</p> -->
+                <p>If you don't wangt to continue tracking a location, select the city from the dashboard. At the bottom of the page, select the "Remove city" icon.</p>
               </div>
               </Modal>
         </nav>
@@ -52,16 +59,58 @@
 import { ref } from "vue";
 import Modal from './Modal.vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router';
+import { uid } from "uid";
+import { useAuth0} from "@auth0/auth0-vue"
 
 // instabtiate router
 const route = useRoute();
 const router = useRouter();
+
+// add city function
+const myCities = ref([])
+const addCity = () => {
+  if (localStorage.getItem("myCities")) {
+    myCities.value = JSON.parse(localStorage.getItem("myCities"))
+  }
+
+  const location = {
+    id: uid(),
+    // we establish these params in router/index.js
+    state: route.params.state,
+    city: route.params.city,
+    coords: {
+      lat: route.query.lat,
+      lon: route.query.lon
+    }
+
+  }
+
+  myCities.value.push(location);
+  localStorage.setItem(
+    "myCities", JSON.stringify(myCities.value)
+  )
+
+  // creates an object that includes a route request
+  let query = Object.assign({}, route.query)
+  // remove the preview query param from the URL
+  delete query.preview;
+  // add ID attribute to our location
+  query.id = location.id;
+  router.replace( {query} )
+
+  console.log(localStorage.getItem("myCities"))
+}
 
 const modalActive = ref(null);
 const toggleModal = () => {
     modalActive.value = !modalActive.value
 }
 
+// Logout function
+const { isAuthenticated, logout } = useAuth0();
+const log_out = () => {
+  logout({ returnTo: window.location.origin });
+}
 
 </script>
 
